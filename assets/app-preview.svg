@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 720" role="img" aria-label="myTraffic interface preview">
+  <defs>
+    <filter id="s" x="-5%" y="-5%" width="110%" height="115%"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#0C0F14" flood-opacity=".10"/></filter>
+  </defs>
+  <rect width="1200" height="720" rx="22" fill="#FFFFFF"/>
+  <!-- title bar -->
+  <rect width="1200" height="52" rx="22" fill="#F5F4F2"/>
+  <rect y="30" width="1200" height="22" fill="#F5F4F2"/>
+  <circle cx="30" cy="26" r="6" fill="#B08A8A"/><circle cx="50" cy="26" r="6" fill="#FDEBB0"/><circle cx="70" cy="26" r="6" fill="#B49A85"/>
+  <text x="600" y="31" text-anchor="middle" font-family="Pretendard, Inter, sans-serif" font-size="14" fill="#2E2F33">myTraffic — workspace: default</text>
+  <!-- sidebar -->
+  <rect x="0" y="52" width="200" height="668" fill="#F5F4F2"/>
+  <g font-family="Pretendard, Inter, sans-serif" font-size="14" fill="#2E2F33">
+    <rect x="14" y="74" width="172" height="36" rx="10" fill="#0C0F14"/>
+    <text x="32" y="97" fill="#FFFFFF">History</text>
+    <text x="32" y="140">Intercept</text>
+    <text x="32" y="178">Replay</text>
+    <text x="32" y="216">Automate</text>
+    <text x="32" y="254">Sitemap</text>
+    <text x="32" y="292">Match &amp; Replace</text>
+    <text x="32" y="330">Decoder</text>
+    <text x="32" y="368">Comparer</text>
+    <text x="32" y="406">Scope</text>
+  </g>
+  <rect x="14" y="640" width="172" height="58" rx="14" fill="#FDEBB0"/>
+  <text x="32" y="665" font-family="Pretendard, sans-serif" font-size="12" fill="#2E2F33">Proxy listening</text>
+  <text x="32" y="685" font-family="JetBrains Mono, monospace" font-size="13" fill="#0C0F14">127.0.0.1:8080</text>
+  <!-- filter bar -->
+  <rect x="224" y="72" width="952" height="40" rx="12" fill="#F5F4F2"/>
+  <text x="244" y="97" font-family="JetBrains Mono, monospace" font-size="13" fill="#A87C3A">filter</text>
+  <text x="300" y="97" font-family="JetBrains Mono, monospace" font-size="13" fill="#2E2F33">host.cont:"example" and resp.code.gte:400</text>
+  <!-- table -->
+  <g font-family="JetBrains Mono, monospace" font-size="13" fill="#2E2F33">
+    <text x="240" y="146" fill="#B49A85">#</text><text x="290" y="146" fill="#B49A85">METHOD</text><text x="380" y="146" fill="#B49A85">HOST</text><text x="600" y="146" fill="#B49A85">PATH</text><text x="900" y="146" fill="#B49A85">STATUS</text><text x="990" y="146" fill="#B49A85">SIZE</text><text x="1080" y="146" fill="#B49A85">TIME</text>
+    <rect x="224" y="160" width="952" height="34" rx="8" fill="#EEE5E0"/>
+    <text x="240" y="182">412</text><text x="290" y="182">GET</text><text x="380" y="182">api.example.com</text><text x="600" y="182">/v1/users/me</text><text x="900" y="182" fill="#A87C3A">200</text><text x="990" y="182">1.2k</text><text x="1080" y="182">84ms</text>
+    <text x="240" y="220">413</text><text x="290" y="220">POST</text><text x="380" y="220">api.example.com</text><text x="600" y="220">/v1/session</text><text x="900" y="220" fill="#A87C3A">201</text><text x="990" y="220">318</text><text x="1080" y="220">121ms</text>
+    <text x="240" y="254">414</text><text x="290" y="254">GET</text><text x="380" y="254">cdn.example.com</text><text x="600" y="254">/app.js</text><text x="900" y="254" fill="#A87C3A">200</text><text x="990" y="254">88k</text><text x="1080" y="254">32ms</text>
+    <text x="240" y="288">415</text><text x="290" y="288">PUT</text><text x="380" y="288">api.example.com</text><text x="600" y="288">/v1/users/42</text><text x="900" y="288" fill="#B08A8A">403</text><text x="990" y="288">96</text><text x="1080" y="288">57ms</text>
+  </g>
+  <!-- request / response panes -->
+  <g filter="url(#s)">
+    <rect x="224" y="320" width="466" height="378" rx="16" fill="#FFFFFF" stroke="#E9E4E0"/>
+    <rect x="710" y="320" width="466" height="378" rx="16" fill="#FFFFFF" stroke="#E9E4E0"/>
+  </g>
+  <g font-family="Pretendard, sans-serif" font-size="13" font-weight="600" fill="#0C0F14">
+    <text x="244" y="350">Request</text><text x="730" y="350">Response</text>
+  </g>
+  <g font-family="JetBrains Mono, monospace" font-size="13" fill="#2E2F33">
+    <text x="244" y="384"><tspan fill="#A87C3A">PUT</tspan> /v1/users/42 HTTP/1.1</text>
+    <text x="244" y="408">Host: api.example.com</text>
+    <text x="244" y="432">Content-Type: application/json</text>
+    <text x="244" y="456">Authorization: Bearer ••••••</text>
+    <text x="244" y="496">{ "role": <tspan fill="#B08A8A">"admin"</tspan> }</text>
+    <text x="730" y="384">HTTP/1.1 <tspan fill="#B08A8A">403 Forbidden</tspan></text>
+    <text x="730" y="408">Content-Type: application/json</text>
+    <text x="730" y="432">Content-Length: 96</text>
+    <text x="730" y="472">{ "error": "insufficient_scope" }</text>
+  </g>
+  <rect x="244" y="640" width="120" height="38" rx="12" fill="#0C0F14"/>
+  <text x="304" y="664" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="13" fill="#FFFFFF">Send to Replay</text>
+  <rect x="376" y="640" width="96" height="38" rx="12" fill="#FDEBB0"/>
+  <text x="424" y="664" text-anchor="middle" font-family="Pretendard, sans-serif" font-size="13" fill="#0C0F14">Forward</text>
+</svg>

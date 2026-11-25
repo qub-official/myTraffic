@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>myTraffic</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script>try{var t=localStorage.getItem('mt-theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"></span>
+      <strong>myTraffic</strong>
+      <span class="ko" lang="ko">마이트래픽</span>
+    </div>
+    <div class="status" id="status">
+      <span class="pill" id="connPill">connecting…</span>
+    </div>
+    <div class="topbar-actions">
+      <label class="switch">
+        <input type="checkbox" id="interceptToggle">
+        <span>Intercept</span>
+      </label>
+      <button class="btn-ghost" id="clearBtn" type="button">Clear</button>
+      <button class="btn-ghost" id="saveProject" type="button" title="Download the current session">Save</button>
+      <button class="btn-ghost" id="loadProject" type="button" title="Load a saved session">Load</button>
+      <input type="file" id="loadFile" accept="application/json" hidden>
+      <a class="btn-ghost" href="/api/ca" download>CA cert</a>
+      <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle theme">◐</button>
+    </div>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-view="history" role="tab">History</button>
+    <button class="tab" data-view="intercept" role="tab">Intercept <span class="badge" id="qBadge" hidden>0</span></button>
+    <button class="tab" data-view="replay" role="tab">Replay</button>
+    <button class="tab" data-view="automate" role="tab">Automate</button>
+    <button class="tab" data-view="rules" role="tab">Match &amp; Replace</button>
+    <button class="tab" data-view="decoder" role="tab">Decoder</button>
+    <button class="tab" data-view="comparer" role="tab">Comparer</button>
+    <button class="tab" data-view="sequencer" role="tab">Sequencer</button>
+    <button class="tab" data-view="sitemap" role="tab">Sitemap</button>
+    <button class="tab" data-view="websockets" role="tab">WebSockets</button>
+    <button class="tab" data-view="findings" role="tab">Findings</button>
+    <button class="tab" data-view="scope" role="tab">Scope</button>
+  </nav>
+
+  <main>
+    <!-- HISTORY -->
+    <section class="view active" id="view-history">
+      <div class="filterbar">
+        <span class="fprefix">filter</span>
+        <input id="filterInput" type="text" spellcheck="false"
+               placeholder='host.cont:"example" and resp.code.gte:400'>
+        <span class="hint" id="count">0</span>
+      </div>
+      <div class="split-h">
+        <div class="table-pane">
+          <table class="flows">
+            <thead><tr>
+              <th>#</th><th>Method</th><th>Host</th><th>Path</th><th>Status</th><th>Size</th><th>Time</th>
+            </tr></thead>
+            <tbody id="flowRows"></tbody>
+          </table>
+        </div>
+        <div class="detail-pane" id="detail">
+          <div class="empty">Select a request to inspect it.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERCEPT -->
+    <section class="view" id="view-intercept">
+      <div class="pad">
+        <p class="muted">When Intercept is on, matching requests pause here until you forward or drop them.</p>
+        <div id="queue"></div>
+      </div>
+    </section>
+
+    <!-- REPLAY -->
+    <section class="view" id="view-replay">
+      <div class="pad replay-grid">
+        <div class="col">
+          <div class="row">
+            <select id="rMethod">
+              <option>GET</option><option>POST</option><option>PUT</option>
+              <option>PATCH</option><option>DELETE</option><option>HEAD</option><option>OPTIONS</option>
+            </select>
+            <input id="rURL" type="text" placeholder="https://example.com/path" spellcheck="false">
+            <button class="btn" id="rSend" type="button">Send</button>
+          </div>
+          <label class="lbl">Headers (one per line, Name: value)</label>
+          <textarea id="rHeaders" spellcheck="false" placeholder="Accept: application/json"></textarea>
+          <label class="lbl">Body</label>
+          <textarea id="rBody" spellcheck="false"></textarea>
+        </div>
+        <div class="col">
+          <label class="lbl">Response</label>
+          <pre class="response" id="rResponse">—</pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTOMATE -->
+    <section class="view" id="view-automate">
+      <div class="pad">
+        <p class="muted">Fuzzer / Intruder. Wrap each payload position with <code>§</code> markers, e.g. <code>https://host/user/§1§</code>. Insert a marker at the cursor with the button.</p>
+        <div class="row wrap">
+          <select id="aMethod">
+            <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
+          </select>
+          <input id="aURL" type="text" placeholder="https://example.com/user/§1§" spellcheck="false" style="flex:1">
+          <button class="btn-ghost" id="aMark" type="button" title="Wrap selection in § markers">§ §</button>
+        </div>
+        <div class="row wrap" style="margin-top:8px">
+          <select id="aAttack" title="Attack type">
+            <option value="sniper">Sniper (1 set, each position)</option>
+            <option value="batteringram">Battering ram (same in all)</option>
+            <option value="pitchfork">Pitchfork (parallel sets)</option>
+            <option value="clusterbomb">Cluster bomb (all combos)</option>
+          </select>
+          <input id="aGrep" placeholder='grep-match (e.g. "error")' class="sm" spellcheck="false">
+          <input id="aConc" type="number" value="10" min="1" max="100" class="sm" title="concurrency" style="max-width:90px">
+          <button class="btn" id="aRun" type="button">Start attack</button>
+        </div>
+        <label class="lbl">Headers (one per line)</label>
+        <textarea id="aHeaders" spellcheck="false" placeholder="Accept: */*" style="min-height:60px"></textarea>
+        <label class="lbl">Body (may contain § markers)</label>
+        <textarea id="aBody" spellcheck="false" style="min-height:60px"></textarea>
+        <label class="lbl">Payload sets — one set per block, separated by a line with just <code>---</code>. For numbers use <code>num:from,to,step</code>.</label>
+        <textarea id="aPayloads" spellcheck="false" placeholder="admin&#10;root&#10;guest&#10;---&#10;num:1,100"></textarea>
+        <div id="aStatus" class="muted" style="margin:8px 0"></div>
+        <div class="table-pane" style="max-height:40vh">
+          <table class="flows"><thead><tr><th>#</th><th>Payload(s)</th><th>Status</th><th>Length</th><th>Time</th><th>Grep</th></tr></thead>
+          <tbody id="aRows"></tbody></table>
+        </div>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section class="view" id="view-rules">
+      <div class="pad">
+        <div class="row wrap">
+          <input id="ruleName" placeholder="name" class="sm">
+          <select id="ruleTarget">
+            <option value="req.header">req.header</option>
+            <option value="req.body">req.body</option>
+            <option value="resp.header">resp.header</option>
+            <option value="resp.body">resp.body</option>
+          </select>
+          <input id="ruleMatch" placeholder="match (regex)" spellcheck="false">
+          <input id="ruleReplace" placeholder="replace" spellcheck="false">
+          <button class="btn" id="ruleAdd" type="button">Add</button>
+        </div>
+        <table class="rules">
+          <thead><tr><th>On</th><th>Name</th><th>Target</th><th>Match</th><th>Replace</th><th></th></tr></thead>
+          <tbody id="ruleRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DECODER -->
+    <section class="view" id="view-decoder">
+      <div class="pad">
+        <div class="row">
+          <select id="dOp">
+            <option value="base64encode">base64 encode</option>
+            <option value="base64decode">base64 decode</option>
+            <option value="urlencode">url encode</option>
+            <option value="urldecode">url decode</option>
+            <option value="hexencode">hex encode</option>
+            <option value="hexdecode">hex decode</option>
+            <option value="md5">md5</option>
+            <option value="sha1">sha1</option>
+            <option value="sha256">sha256</option>
+            <option value="jwtdecode">jwt decode</option>
+          </select>
+          <button class="btn" id="dRun" type="button">Run</button>
+        </div>
+        <label class="lbl">Input</label>
+        <textarea id="dInput" spellcheck="false"></textarea>
+        <label class="lbl">Output</label>
+        <pre class="response" id="dOutput">—</pre>
+      </div>
+    </section>
+
+    <!-- COMPARER -->
+    <section class="view" id="view-comparer">
+      <div class="pad">
+        <p class="muted">Diff two responses or payloads line by line.</p>
+        <div class="replay-grid">
+          <div class="col"><label class="lbl">A</label><textarea id="cmpA" spellcheck="false" style="min-height:200px"></textarea></div>
+          <div class="col"><label class="lbl">B</label><textarea id="cmpB" spellcheck="false" style="min-height:200px"></textarea></div>
+        </div>
+        <button class="btn" id="cmpRun" type="button" style="margin-top:10px">Compare</button>
+        <pre class="response" id="cmpOut" style="margin-top:12px">—</pre>
+      </div>
+    </section>
+
+    <!-- SEQUENCER -->
+    <section class="view" id="view-sequencer">
+      <div class="pad">
+        <p class="muted">Paste captured tokens (session IDs, CSRF tokens…), one per line, to estimate their randomness.</p>
+        <textarea id="seqInput" spellcheck="false" placeholder="a1b2c3...&#10;d4e5f6..." style="min-height:160px"></textarea>
+        <button class="btn" id="seqRun" type="button" style="margin-top:10px">Analyze</button>
+        <div id="seqOut" style="margin-top:14px"></div>
+      </div>
+    </section>
+
+    <!-- WEBSOCKETS -->
+    <section class="view" id="view-websockets">
+      <div class="filterbar">
+        <span class="fprefix">streamql</span>
+        <input id="wsFilter" type="text" spellcheck="false" placeholder='ws.direction.eq:"client" ws.format.eq:"Text"'>
+        <button class="btn-ghost" id="wsClear" type="button">Clear</button>
+      </div>
+      <div class="table-pane" style="height:calc(100% - 44px)">
+        <table class="flows"><thead><tr><th>#</th><th>Dir</th><th>Format</th><th>Host</th><th>Len</th><th>Payload</th></tr></thead>
+        <tbody id="wsRows"></tbody></table>
+      </div>
+    </section>
+
+    <!-- FINDINGS -->
+    <section class="view" id="view-findings">
+      <div class="pad">
+        <div class="row wrap">
+          <input id="fTitle" placeholder="title" spellcheck="false" style="flex:1">
+          <select id="fSeverity">
+            <option value="info">info</option><option value="low">low</option>
+            <option value="medium">medium</option><option value="high">high</option><option value="critical">critical</option>
+          </select>
+          <input id="fHost" placeholder="host (optional)" class="sm" spellcheck="false">
+          <button class="btn" id="fAdd" type="button">Add finding</button>
+        </div>
+        <textarea id="fNote" placeholder="note (optional)" spellcheck="false" style="min-height:50px;margin-top:8px"></textarea>
+        <table class="rules" style="margin-top:14px">
+          <thead><tr><th>Sev</th><th>Title</th><th>Host</th><th>Flow</th><th>Note</th><th></th></tr></thead>
+          <tbody id="fRows"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SITEMAP -->
+    <section class="view" id="view-sitemap">
+      <div class="pad">
+        <div class="row"><button class="btn-ghost" id="smRefresh" type="button">Refresh</button>
+          <span class="muted">Host and path tree built from captured traffic.</span></div>
+        <div id="smTree" style="margin-top:12px;font-family:var(--mono);font-size:13px"></div>
+      </div>
+    </section>
+
+    <!-- SCOPE -->
+    <section class="view" id="view-scope">
+      <div class="pad">
+        <p class="muted">Only hosts in scope are recorded and intercepted. Empty scope records everything. One host suffix per line (e.g. <code>example.com</code>).</p>
+        <textarea id="scopeInput" spellcheck="false" placeholder="example.com"></textarea>
+        <button class="btn" id="scopeSave" type="button">Save scope</button>
+
+        <h3 style="margin:28px 0 6px;font-size:16px">Upstream proxy</h3>
+        <p class="muted">Route all outbound traffic through another proxy (e.g. a corporate proxy or Tor at <code>http://127.0.0.1:8118</code>). Leave empty for none.</p>
+        <div class="row" style="margin-top:8px">
+          <input id="upstreamInput" type="text" placeholder="http://127.0.0.1:8118" spellcheck="false" style="flex:1">
+          <button class="btn" id="upstreamSave" type="button">Save</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>

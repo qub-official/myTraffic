@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>myTraffic — local, free web traffic workbench</title>
+  <meta name="description" content="myTraffic is a free, open-source, local-first workbench for inspecting and replaying web traffic. No signup, no servers, no paid tiers.">
+  <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0C0F14" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/styles.css">
+  <script>
+    // Apply saved theme before paint to avoid a flash.
+    try { var t = localStorage.getItem('mt-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top" aria-label="myTraffic home">
+        <img src="assets/logo.svg" alt="" width="32" height="32">
+        <span>myTraffic</span>
+        <span class="brand-kr" lang="ko">마이트래픽</span>
+      </a>
+      <nav class="nav-links" aria-label="Primary">
+        <a href="#features">Features</a>
+        <a href="#free">Free forever</a>
+        <a href="#cli">CLI &amp; MCP</a>
+        <a href="#download">Download</a>
+      </nav>
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Toggle light and dark theme">
+          <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+          <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>
+        </button>
+        <a class="btn btn-ghost btn-sm" href="https://github.com/qub-official/myTraffic">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero -->
+    <section class="hero" id="top">
+      <div class="container">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="dot"></span> Open source · Local-first · <span lang="ko">무료</span></p>
+          <h1>See every request.<br><span class="hl">Calmly.</span></h1>
+          <p class="lede">myTraffic is a quiet, fast workbench for inspecting, replaying and understanding web traffic on your own machine. Every feature is free. No account, no cloud, no license keys.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#download">Download for Windows</a>
+            <a class="btn btn-ghost" href="https://github.com/qub-official/myTraffic">View source</a>
+          </div>
+          <ul class="hero-meta">
+            <li>No signup</li>
+            <li>Runs offline</li>
+            <li>Light &amp; dark</li>
+          </ul>
+        </div>
+        <figure class="hero-shot">
+          <img src="assets/app-preview.svg" alt="myTraffic window showing request history, a request and its response" width="1200" height="720">
+        </figure>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section" id="features">
+      <div class="container">
+        <header class="section-head">
+          <p class="kicker">Features <span lang="ko">기능</span></p>
+          <h2>One tidy workspace for your traffic.</h2>
+          <p>Built for developers and testers who need to understand exactly what their apps send and receive.</p>
+        </header>
+        <div class="grid">
+          <article class="card"><span class="chip c-gold">01</span><h3>History</h3><p>Every request and response in one searchable, sortable table with a precise query filter.</p></article>
+          <article class="card"><span class="chip c-rose">02</span><h3>Intercept</h3><p>Pause traffic, review it, and decide what happens next, one step at a time.</p></article>
+          <article class="card"><span class="chip c-yellow">03</span><h3>Replay</h3><p>Re-send any request, tweak it in tabs, and compare responses side by side.</p></article>
+          <article class="card"><span class="chip c-taupe">04</span><h3>Automate</h3><p>Run request lists with payload sets, throttling and result filtering, with no speed caps.</p></article>
+          <article class="card"><span class="chip c-gold">05</span><h3>Sitemap</h3><p>A live tree of hosts and paths that builds itself as you browse.</p></article>
+          <article class="card"><span class="chip c-rose">06</span><h3>Match &amp; Replace</h3><p>Rewrite headers and bodies on the fly with simple rules or regular expressions.</p></article>
+          <article class="card"><span class="chip c-yellow">07</span><h3>Decoder &amp; Comparer</h3><p>Base64, URL, hex, JWT and hashes, plus a line-level response diff.</p></article>
+          <article class="card"><span class="chip c-taupe">08</span><h3>Sequencer</h3><p>Measure how random session tokens really are, with per-position entropy.</p></article>
+          <article class="card"><span class="chip c-gold">09</span><h3>WebSockets &amp; Findings</h3><p>Capture WebSocket frames live, and record findings with notes on any request.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Free -->
+    <section class="section section-tint" id="free">
+      <div class="container split">
+        <div>
+          <p class="kicker">Free forever <span lang="ko">평생 무료</span></p>
+          <h2>The features other tools put behind a paywall are here, free.</h2>
+          <p>myTraffic is open source under the MIT license. There is no "Pro" edition, no trial timer and no feature flags waiting for a payment.</p>
+          <ul class="checks">
+            <li>Saved projects and workspaces</li>
+            <li>Unthrottled automation (Intruder)</li>
+            <li>Full HTTPQL search and filters</li>
+            <li>Command line and MCP access</li>
+            <li>WebSockets, Sequencer and Findings</li>
+          </ul>
+        </div>
+        <div class="table-wrap">
+          <table class="compare">
+            <caption class="sr-only">Feature availability comparison</caption>
+            <thead><tr><th scope="col">Capability</th><th scope="col">Typical paid tier</th><th scope="col">myTraffic</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Save projects</th><td>Paid</td><td class="yes">Free</td></tr>
+              <tr><th scope="row">Full-speed automation</th><td>Paid</td><td class="yes">Free</td></tr>
+              <tr><th scope="row">Query filters</th><td>Paid</td><td class="yes">Free</td></tr>
+              <tr><th scope="row">CLI</th><td>Paid</td><td class="yes">Free</td></tr>
+              <tr><th scope="row">AI agent access (MCP)</th><td>Limited</td><td class="yes">Free</td></tr>
+              <tr><th scope="row">Account required</th><td>Yes</td><td class="yes">Never</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Local -->
+    <section class="section" id="local">
+      <div class="container">
+        <header class="section-head">
+          <p class="kicker">Local-first <span lang="ko">로컬 우선</span></p>
+          <h2>Your traffic never leaves your computer.</h2>
+        </header>
+        <div class="grid grid-3">
+          <article class="card card-flat"><h3>No signup</h3><p>Install and open it. There's no email, login or license server.</p></article>
+          <article class="card card-flat"><h3>No servers</h3><p>Everything runs and is stored on your machine. Works fully offline.</p></article>
+          <article class="card card-flat"><h3>Lightweight</h3><p>A small native app that starts fast and stays out of your way.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLI & MCP -->
+    <section class="section section-tint" id="cli">
+      <div class="container split">
+        <div>
+          <p class="kicker">CLI &amp; MCP <span lang="ko">자동화</span></p>
+          <h2>Use it from the terminal, or let your AI assistant help.</h2>
+          <p>The same engine powers the desktop app, a scriptable command line and a built-in MCP server, so AI assistants can query history and replay requests with your permission.</p>
+        </div>
+        <div class="code-card" role="region" aria-label="Example terminal session">
+          <div class="code-bar"><span></span><span></span><span></span><em>terminal</em></div>
+<pre><code><span class="c"># list recent failed requests</span>
+<span class="p">$</span> mytraffic history --filter "resp.code.gte:400"
+
+<span class="c"># replay request #412</span>
+<span class="p">$</span> mytraffic replay 412
+
+<span class="c"># start the MCP server for AI clients</span>
+<span class="p">$</span> mytraffic mcp</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download -->
+    <section class="section" id="download">
+      <div class="container">
+        <div class="download">
+          <div>
+            <p class="kicker">Download <span lang="ko">다운로드</span></p>
+            <h2>Get myTraffic for Windows.</h2>
+            <p>Windows 10 and 11, 64-bit. Installers and checksums are published on GitHub Releases.</p>
+          </div>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="https://github.com/qub-official/myTraffic/releases/latest">Latest release</a>
+            <a class="btn btn-ghost" href="https://github.com/qub-official/myTraffic/releases">All releases</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div class="brand brand-sm"><img src="assets/logo.svg" alt="" width="24" height="24"><span>myTraffic</span></div>
+      <p>MIT licensed. Made by <a href="https://github.com/qub-official">qub-official</a>. Use it only on systems you own or are authorized to test.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var btn = document.getElementById('themeToggle');
+      function current() {
+        var t = root.getAttribute('data-theme');
+        if (t) return t;
+        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      btn.addEventListener('click', function () {
+        var next = current() === 'dark' ? 'light' : 'dark';
+        root.setAttribute('data-theme', next);
+        try { localStorage.setItem('mt-theme', next); } catch (e) {}
+      });
+    })();
+  </script>
+</body>
+</html>
